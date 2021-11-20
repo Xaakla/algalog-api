@@ -1,0 +1,8 @@
+CREATE SEQUENCE IF NOT EXISTS x_seq;
+
+CREATE TABLE IF NOT EXISTS client (
+    id BIGINT PRIMARY KEY DEFAULT nextval('x_seq'),
+    name VARCHAR(60) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL
+);
