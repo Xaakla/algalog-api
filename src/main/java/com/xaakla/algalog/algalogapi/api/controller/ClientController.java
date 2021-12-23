@@ -2,6 +2,7 @@ package com.xaakla.algalog.algalogapi.api.controller;
 
 import com.xaakla.algalog.algalogapi.domain.model.Client;
 import com.xaakla.algalog.algalogapi.domain.repository.ClientRepository;
+import com.xaakla.algalog.algalogapi.domain.service.CatalogoClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,9 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private CatalogoClienteService catalogoClienteService;
+
     @GetMapping
     public List<Client> listClients() {
         return clientRepository.findAll();
@@ -39,9 +43,8 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long saveClient(@RequestBody @Valid Client client) {
-        clientRepository.save(client);
-        return client.getId();
+    public Client saveClient(@RequestBody @Valid Client client) {
+        return catalogoClienteService.salvar(client);
     }
 
     @PutMapping("/{id}")
@@ -50,7 +53,7 @@ public class ClientController {
             return ResponseEntity.notFound().build();
 
         client.setId(id);
-        clientRepository.save(client);
+        catalogoClienteService.salvar(client);
 
         return ResponseEntity.ok(client);
     }
@@ -60,7 +63,7 @@ public class ClientController {
         if (!clientRepository.existsById(id))
             return ResponseEntity.notFound().build();
 
-        clientRepository.deleteById(id);
+        catalogoClienteService.excluir(id);
 
         return ResponseEntity.noContent().build();
     }
